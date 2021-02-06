@@ -32,7 +32,7 @@ FG = np.zeros(ndlt, dtype=float_type);
 RG = np.zeros(ndlt, dtype=float_type);
 
 #Définition de l'intégration de Gauss
-npg = 9; 
+npg = 4; 
 (xloc,W) = Gauss(npg);
 
 #Boucle sur les éléments
@@ -140,6 +140,8 @@ for ie in range(0, nelt):
     MG=Assembl(MG,me,Kloc2);  # Assemble me dans MG connaissant Kloc2 #matrce masse globale
     #Fin de la boucle sur les éléments intérieurs
 
+
+
 # Boucle sur les éléments de contour
 # Ajustement des paramètres d'intégration
 # On utilise 2 points de Gauss en 1D (intègre exactement ordre 3)
@@ -200,15 +202,15 @@ for ie in range(0,nelc):
     FG = AssemblF(FG,fe,Kloc);
     #Fin de la boucle sur les éléments de contour
 
-KN = KG;  
-FN = FG;
+KN = KG
+FN = FG
 
 # 10. Traitement des C.L. de déplacement imposé (Dirichlet)
 # Imposition des déplacements u  (selon x)
 for i in range(0,nclx):          # Boucle sur les noeuds avec u imposé
     nn= CLx_0[i]      # Numéro du noeud en question
     # Calcul de la position de ce DDL
-    pos=(nn-1)*ddln+1  # u et v des noeuds avant + 1
+    pos=nn*ddln  # u et v des noeuds avant + 1
     Big= max(abs(KG[pos,:]))
     for j in range(0,ndlt):        # Boucle sur tous les DDL du système
         if(j==pos):
@@ -221,7 +223,7 @@ for i in range(0,nclx):          # Boucle sur les noeuds avec u imposé
     for i in range(0,ncly):            # Boucle sur les noeuds avec v imposé
         nn= CLy_0[i];       # Numéro du noeud en question
         # Calcul de la position de ce DDL
-        pos=(nn-1)*ddln+2;  # u et v des noeuds avant + 2
+        pos=nn*ddln+1;  # u et v des noeuds avant + 2
         Big= max(abs(KG[pos,:]))
         for j in range(0,ndlt):        # Boucle sur tous les DDL du système
             if(j==pos):
@@ -231,7 +233,9 @@ for i in range(0,nclx):          # Boucle sur les noeuds avec u imposé
                 KG[pos,j]=0.0;    # Met un 0 si ce n'est pas le bon DDL
 
 # 11. RÉSOLUTION DU SYSTÈME EN DÉPLACEMENT (u et v en m par tout)
+print_mat(KG/1e11)
 sol = np.linalg.solve(KG,FG)
+
 u = np.zeros(nnt, dtype=float_type)
 v = np.zeros(nnt, dtype=float_type)
 for z in range(0, nnt):

@@ -3,6 +3,12 @@ from os import linesep as endl
 
 from data import *
 
+def print_mat(KG):
+    for j in range(len(KG[0,:])):
+        for i in range(0,len(KG)):
+                if(abs(KG[i,j]) > 1e-8):
+                    print(i+1,j+1,KG[i,j])
+
 def Feeldof(nd, nnel, ddln):
     edof = nnel*ddln
     index = np.zeros(edof, dtype=np.int32)

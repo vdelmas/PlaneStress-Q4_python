@@ -6,7 +6,7 @@ float_type = np.float64
 
 E = 2*10**11     # Module de Young en Pa
 v = 0.3         # Coefficient de Poisson
-Hypothesis = 1  # Plane stress
+Hypothesis = 2  # Plane stress
 rho = 7850      # Masse volumique en Kg/m3
 b = 0.02        # épaisseur en m selon z
 
@@ -46,9 +46,9 @@ if(Hypothesis  == 1):    # plane stress
     D = facteur*np.array([[1 , v, 0],[v , 1, 0],[0 , 0, (1-v)/2]], dtype=float_type);
 else:
     facteur = E/((1-2*v)*(1+v));  # plane strain
-    # D = facteur*np.array([[1-v, v, 0],[v , 1-v, 0],[0, 0, (1-2*v)/2.]]); ??
+    D = facteur*np.array([[1-v, v, 0],[v , 1-v, 0],[0, 0, (1-2*v)/2.]]); 
     mu = E/(2+2*v);
     D1 = np.array([[2*mu, 0, 0],[0, 2*mu, 0],[0, 0, mu]], dtype=float_type);
     lambd = facteur*v;
     D2 = facteur*np.array([[1, 1, 0],[1, 1, 0],[0, 0, 0]], dtype=float_type);
-    D = D1+D2;
+    # D = D1+D2; ?? probleme dans le code matlab
